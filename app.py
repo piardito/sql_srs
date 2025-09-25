@@ -39,6 +39,15 @@ with st.sidebar :
     )
     st.write(f"You selected : {option}")
 
+with st.sidebar :
+    option = st.selectbox(
+        "What would you like to review",
+        ['Join','Groupby','Windows Functions'],
+        index = None,
+        placeholder = "Select a theme ..."
+    )
+    st.write(f"You selected : {option}")
+
 st.header("enter your code")
 query = st.text_area(label = "votre code SQL ici",key = "user_input")
 if query:
