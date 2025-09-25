@@ -3,6 +3,9 @@ import pandas as pd
 import duckdb as db
 import io
 
+st.write("""# SQL SRS
+    Spaced Repetition System SQL practice""")
+
 csv = '''
 beverage,price
 orange juice,2.5
@@ -27,12 +30,20 @@ CROSS JOIN food_items
 """
 solution = db.query(answer)
 
+with st.sidebar :
+    option = st.selectbox(
+        "What would you like to review",
+        ['Join','Groupby','Windows Functions'],
+        index = None,
+        placeholder = "Select a theme ..."
+    )
+    st.write(f"You selected : {option}")
+
 st.header("enter your code")
 query = st.text_area(label = "votre code SQL ici",key = "user_input")
 if query:
     result = db.query(query)
     st.dataframe(result)
-
 
 tab2,tab3 = st.tabs(['Tables','Solution'])
 
