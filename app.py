@@ -4,6 +4,7 @@ import io
 import duckdb as db
 import pandas as pd
 import streamlit as st
+import ast
 
 st.write(
     """# SQL SRS
@@ -22,7 +23,7 @@ con = db.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 with st.sidebar:
     theme = st.selectbox(
         "What would you like to review",
-        ("cross_joins", "Groupby", "Windows Functions"),
+        ("cross_joins", "Groupby", "window_functions"),
         index=None,
         placeholder="Select a theme ...",
     )
@@ -33,9 +34,9 @@ with st.sidebar:
 
 st.header("enter your code")
 query = st.text_area(label="Votre code SQL ici", key="user_input")
-# if query:
-#     result = db.query(query).df()
-#     st.dataframe(result)
+if query:
+     result = con.execute(query).df()
+     st.dataframe(result)
 #
 #     if len(result.columns) != len(solution_df.columns):
 #         st.write("Some colums are missing")
@@ -52,15 +53,16 @@ query = st.text_area(label="Votre code SQL ici", key="user_input")
 #         )
 #
 #
-# tab2, tab3 = st.tabs(["Tables", "Solution"])
-#
-# with tab2:
-#     st.write("table : beverages")
-#     st.dataframe(beverages)
-#     st.write("table : food_items")
-#     st.dataframe(food_items)
-#     st.write("expected : ")
-#     st.dataframe(solution_df)
+tab2, tab3 = st.tabs(["Tables", "Solution"])
+with tab2:
+      exercise_tables = ast.literal_eval(exercise.loc[0,"tables"])
+      for table in exercise_tables:
+          st.write(f"table : {table}")
+          df_table = con.execute(f"SELECT * FROM {table}").df()
+          st.dataframe(df_table)
 
-# with tab3:
-#     st.write(ANSWER_STR)
+with tab3:
+    exercice_name = exercise.loc[0, "exercise_name"]
+    with open(f"answers/{exercice_name}.sql","r") as f:
+        answer = f.read()
+    st.write(answer)
