@@ -2,8 +2,9 @@
 # pylint: disable=consider-using-with
 # pylint: disable=unspecified-encoding
 # pylint: disable=exec-used
-import os
 import logging
+import os
+
 import duckdb as db
 import streamlit as st
 
