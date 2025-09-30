@@ -4,7 +4,7 @@ import io
 import duckdb as db
 import pandas as pd
 import streamlit as st
-import ast
+
 
 st.write(
     """# SQL SRS
@@ -24,7 +24,7 @@ with st.sidebar:
         placeholder="Select a theme ...",
     )
     st.write(f"You selected : {theme}")
-    exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df()
+    exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df().sort_values("last_reviewed").reset_index()
     st.write(exercise)
 
 if theme is None:
@@ -64,7 +64,7 @@ if query:
 
 tab2, tab3 = st.tabs(["Tables", "Solution"])
 with tab2:
-      exercise_tables = ast.literal_eval(exercise.loc[0,"tables"])
+      exercise_tables = exercise.loc[0,"tables"]
       for table in exercise_tables:
           st.write(f"table : {table}")
           df_table = con.execute(f"SELECT * FROM {table}").df()
